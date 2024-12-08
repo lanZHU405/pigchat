@@ -39,7 +39,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String id;
         try {
             Claims claims = jwtUtil.parseToken(token);
-            id = claims.getSubject(); // 假设JWT中的用户ID存储在subject字段中
+            id = claims.getId(); // 假设JWT中的用户ID存储在subject字段中
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");

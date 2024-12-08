@@ -22,6 +22,7 @@ public class Codes {
     public static final String NAME_OR_PASSWORD_FIELD = "用户名或密码错误";
     public static final String ROLE_FIELD = "权限错误";
     public static final String LOGIN_YES = "登录成功";
+    public static final String LOGOUT_YES = "登出成功";
     public static final String USER_EXISTS = "该用户已存在";
     public static final String USER_NOT_EXISTS = "该用户不存在";
     public static final String REGISTER_SUCCESS = "注册成功";

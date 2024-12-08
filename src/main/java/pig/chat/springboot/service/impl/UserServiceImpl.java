@@ -5,18 +5,23 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.micrometer.common.util.StringUtils;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import pig.chat.springboot.common.Codes;
 import pig.chat.springboot.common.Result;
 import pig.chat.springboot.domain.LoginUser;
 import pig.chat.springboot.domain.User;
+import pig.chat.springboot.exception.ServiceException;
 import pig.chat.springboot.mapper.UserMapper;
 import pig.chat.springboot.service.UserService;
 import pig.chat.springboot.utils.JwtUtil;
 
+import java.net.HttpCookie;
 import java.util.Objects;
 
 @Service
@@ -39,7 +44,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
         if (Objects.isNull(authenticate)){
-            throw new RuntimeException("登录失败");
+            throw new ServiceException(Codes.USER_NOT_EXISTS);
         }
 
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
@@ -50,7 +55,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
                 .eq(User::getId,id));
 
 
-        return Result.success(token,"登录成功");
+        return Result.success(token, Codes.LOGIN_YES);
+    }
+
+    @Override
+    public Result<Object> logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null ) {
+            return Result.error(HttpServletResponse.SC_UNAUTHORIZED, Codes.NOT_LOGIN);
+        }
+
+        User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        userMapper.update(new LambdaUpdateWrapper<User>()
+                .set(User::getStatus, 0)
+                .eq(User::getId,"1" ));
+
+        SecurityContextHolder.clearContext(); // 清除安全上下文
+
+        return Result.success(Codes.LOGOUT_YES);
     }
 
 

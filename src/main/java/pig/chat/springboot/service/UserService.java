@@ -8,4 +8,6 @@ public interface UserService extends IService<User> {
     User getById(String id);
 
     Result<Object> login(User user);
+
+    Result<Object> logout();
 }
