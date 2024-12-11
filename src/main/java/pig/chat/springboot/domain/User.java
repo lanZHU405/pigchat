@@ -9,7 +9,7 @@ import java.util.Date;
 @TableName("users")
 public class User {
 
-    private String id;
+    private Long id;
 
     private String username;
 
@@ -24,4 +24,14 @@ public class User {
     private Date lastLoginAt;
 
     private Integer status;
+
+    private String sex;
+
+    private String userType;
+
+    private String avatar;
+
+    private String phoneNumber;
+
+    private String nickName;
 }
