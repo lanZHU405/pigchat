@@ -12,7 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import pig.chat.springboot.domain.LoginUser;
 import pig.chat.springboot.domain.User;
+import pig.chat.springboot.mapper.MenuMapper;
 import pig.chat.springboot.mapper.UserMapper;
 import pig.chat.springboot.service.UserService;
 import pig.chat.springboot.utils.JwtUtil;
@@ -26,6 +28,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private UserMapper userMapper;
     @Resource
     private JwtUtil jwtUtil;
+
+    @Resource
+    private MenuMapper menuMapper;
 
 
     @Override
@@ -57,7 +62,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not Login");
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, null);
+        LoginUser loginUser = new LoginUser(user,menuMapper.getPermission(user));
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request, response);
