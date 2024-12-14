@@ -1,22 +1,19 @@
 package pig.chat.springboot.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pig.chat.springboot.common.Codes;
 import pig.chat.springboot.common.Result;
 import pig.chat.springboot.domain.User;
-import pig.chat.springboot.exception.ServiceException;
 import pig.chat.springboot.service.UserService;
 
-import java.util.Objects;
+import java.util.List;
 
 @RestController
 @Slf4j
-@CrossOrigin
 @RequestMapping("/user")
-public class LoginController {
+public class UserController {
 
     @Resource
     private UserService userService;
@@ -31,5 +28,12 @@ public class LoginController {
     @ResponseBody
     public Result<Object> logout(){
         return userService.logout();
+    }
+
+    @PreAuthorize("hasAuthority('system:user:list')")
+    @GetMapping("/list")
+    @ResponseBody
+    public Result<List<User>> getList(){
+        return Result.success(userService.list());
     }
 }
