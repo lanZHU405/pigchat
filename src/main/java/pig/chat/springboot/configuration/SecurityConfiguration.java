@@ -1,6 +1,8 @@
 package pig.chat.springboot.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,13 +26,17 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pig.chat.springboot.filter.JwtAuthenticationTokenFilter;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfiguration {
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Resource
     private UserDetailsService userDetailsService;
@@ -61,13 +67,39 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/user/login").anonymous()
                         .anyRequest().authenticated())
-                .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling((exceptions) -> exceptions
+                        .authenticationEntryPoint((request, response, exception) -> handleAuthenticationException(response))
+                        .accessDeniedHandler((request, response, accessDeniedException) -> handleAccessDeniedException(response))
+                );
         return http.build();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    private void handleAuthenticationException(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        try (var writer = response.getWriter()) {
+            writer.write(objectMapper.writeValueAsString(
+                    Map.of("code", 401, "message", "未登录或token已过期")
+            ));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void handleAccessDeniedException(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        try (var writer = response.getWriter()) {
+            writer.write(objectMapper.writeValueAsString(
+                    Map.of("code", 403, "message", "无权访问")
+            ));
+        }
     }
 
 
