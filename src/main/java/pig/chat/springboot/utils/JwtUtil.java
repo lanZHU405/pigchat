@@ -1,11 +1,9 @@
 package pig.chat.springboot.utils;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
+import pig.chat.springboot.exception.ServiceException;
 
 import java.util.Date;
 
@@ -26,10 +24,15 @@ public class JwtUtil {
 
     public static Claims parseToken(String token) {
         // 解析JWT并验证签名
-        Claims claims = Jwts.parser()
-                .setSigningKey("secret") // 设置签名时使用的密钥
-                .parseClaimsJws(token) // 解析token
-                .getBody(); // 获取claims
+        Claims claims;
+        try{
+            claims = Jwts.parser()
+                    .setSigningKey("secret") // 设置签名时使用的密钥
+                    .parseClaimsJws(token) // 解析token
+                    .getBody(); // 获取claims
+        }catch (ExpiredJwtException e){
+            throw new ServiceException("token已过期");
+        }
 
         return claims;
     }

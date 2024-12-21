@@ -1,12 +1,17 @@
 package pig.chat.springboot.controller;
 
+import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pig.chat.springboot.common.Codes;
 import pig.chat.springboot.common.Result;
 import pig.chat.springboot.domain.User;
+import pig.chat.springboot.exception.ServiceException;
 import pig.chat.springboot.service.UserService;
+import pig.chat.springboot.utils.JwtUtil;
 
 import java.util.List;
 
@@ -35,5 +40,24 @@ public class UserController {
     @ResponseBody
     public Result<List<User>> getList(){
         return Result.success(userService.list());
+    }
+
+    @GetMapping("/isLogin")
+    @ResponseBody
+    public Result<User> isLogin(@RequestParam String token){
+        String id;
+        try {
+            Claims claims = JwtUtil.parseToken(token);
+            id = claims.getId(); // 假设JWT中的用户ID存储在subject字段中
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException(Codes.NOT_LOGIN);
+        }
+
+        User user = userService.getById(id);
+        if (user!=null){
+            return Result.success(user);
+        }
+        return Result.error(Codes.NOT_LOGIN);
     }
 }
