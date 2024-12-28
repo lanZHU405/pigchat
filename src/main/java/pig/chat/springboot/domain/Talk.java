@@ -6,4 +6,6 @@ import lombok.Data;
 @Data
 @TableName("talk")
 public class Talk {
+
+    private String id;
 }
