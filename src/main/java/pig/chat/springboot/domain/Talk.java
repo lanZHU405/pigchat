@@ -24,9 +24,11 @@ public class Talk {
     @TableField("message")
     private String message;
 
+    // 发送时间
     @TableField("send_at")
     private Date sendAt;
 
+    // 是否已读
     @TableField("is_read")
     private boolean isRead;
 }
