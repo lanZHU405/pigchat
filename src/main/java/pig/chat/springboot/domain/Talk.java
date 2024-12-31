@@ -31,4 +31,12 @@ public class Talk {
     // 是否已读
     @TableField("is_read")
     private boolean isRead;
+
+    // 消息类型
+    @TableField("message_type")
+    private String messageType;
+
+    // 是否是回复的消息
+    @TableField("reply_id")
+    private String replyId;
 }
