@@ -60,4 +60,16 @@ public class UserController {
         }
         return Result.error(Codes.NOT_LOGIN);
     }
+
+    @GetMapping("/getFriend/{id}")
+    @ResponseBody
+    public Result<List<User>> getFriend(@PathVariable String id){
+        return userService.getFriendById(id);
+    }
+
+    @GetMapping("/getUserInfo/{id}")
+    @ResponseBody
+    public Result<User> getUserInfo(@PathVariable String id){
+        return Result.success(userService.getById(id));
+    }
 }

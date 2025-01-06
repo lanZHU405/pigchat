@@ -22,6 +22,7 @@ import pig.chat.springboot.service.UserService;
 import pig.chat.springboot.utils.JwtUtil;
 
 import java.net.HttpCookie;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -74,6 +75,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         SecurityContextHolder.clearContext(); // 清除安全上下文
 
         return Result.success(Codes.LOGOUT_YES);
+    }
+
+    @Override
+    public Result<List<User>> getFriendById(String id) {
+        return Result.success(userMapper.getFriendById(id));
     }
 
 
