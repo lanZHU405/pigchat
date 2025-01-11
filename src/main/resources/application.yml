@@ -1,4 +1,16 @@
 spring:
+  rabbitmq:
+    host: 113.44.139.100 #主机名
+    port: 5672  # 消息发送接收端口
+    virtual-host: /pigchat #虚拟主机
+    username: linjunyi #用户名
+    password: linjunyi3676 #密码
+    listener:
+      simple:
+        prefetch: 1  # 每个消费者每次处理一条消息，处理完才能接收下一条消息，而不是轮询的模式
+  web:
+    resources:
+      static-locations: classpath:/public/,classpath:/static/
   data:
     mongodb:
       # 主机地址
@@ -8,6 +20,14 @@ spring:
       # 端口号，默认为27017
       port: 27017
   datasource:
+    druid:
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin
+        reset-enable: false  # 是否允许清空监控数据
+    type: com.alibaba.druid.pool.DruidDataSource
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
