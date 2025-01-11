@@ -23,11 +23,11 @@ public class BigModelNew extends WebSocketListener {
     // Spark Max-32K   https://spark-api.xf-yun.com/chat/max-32k   domain参数为max-32k
     // Spark4.0 Ultra  https://spark-api.xf-yun.com/v4.0/chat      domain参数为4.0Ultra
 
-    public static final String hostUrl = "https://spark-api.xf-yun.com/v3.1/chat";
-    public static final String domain = "generalv3";
-    public static final String appid = "e8b16518";
-    public static final String apiSecret = "NTQzZWJlMGE3NTU0M2EyODQ5MDU1YmRk";
-    public static final String apiKey = "41c21254d6ede7ae183fa56b66b752ba";
+    public static final String hostUrl = "";
+    public static final String domain = "";
+    public static final String appid = "";
+    public static final String apiSecret = "";
+    public static final String apiKey = "";
 
     public static List<RoleContent> historyList=new ArrayList<>(); // 对话历史存储集合
 
