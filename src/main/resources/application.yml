@@ -1,8 +1,9 @@
 spring:
+  ip: 127.0.0.1
   rabbitmq:
     host: 113.44.139.100 #主机名
     port: 5672  # 消息发送接收端口
-    virtual-host: /pigchat #虚拟主机
+    virtual-host: pigchat #虚拟主机
     username: linjunyi #用户名
     password: linjunyi3676 #密码
     listener:
@@ -19,6 +20,12 @@ spring:
       database: pigchat
       # 端口号，默认为27017
       port: 27017
+      # 用户名
+      username: linjunyi
+      # 密码
+      password: linjunyi
+      # 认证数据库，通常与目标数据库相同
+      authentication-database: admin
   datasource:
     druid:
       stat-view-servlet:
@@ -29,9 +36,9 @@ spring:
         reset-enable: false  # 是否允许清空监控数据
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
-    password: 1234
+    password: pigchat1234
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/pigchat?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://113.44.139.100:3306/pigchat?useSSL=false&serverTimezone=UTC
 mybatis-plus:
   type-aliases-package: pig.chat.springboot.domain     #别名扫描包
   mapper-locations: "classpath*:/mapper/**/*.xml"       # Mapper.xml文件地址
