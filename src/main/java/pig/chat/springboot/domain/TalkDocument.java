@@ -1,6 +1,7 @@
 package pig.chat.springboot.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -8,13 +9,11 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import java.util.Date;
 
 @Document(collection = "talk")
+@Data
 public class TalkDocument {
 
     @MongoId
     private String id;
-
-    @Field("status")
-    private Integer status;
 
     // 发送者id
     @Field("sender_id")

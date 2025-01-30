@@ -65,6 +65,8 @@ public class SecurityConfiguration {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/druid/**").permitAll()
+                        .requestMatchers("/druid/js/**","/druid/css/**").permitAll()
                         .requestMatchers("/user/login").anonymous()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
