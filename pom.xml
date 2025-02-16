@@ -154,6 +154,14 @@
 			<version>5.8.33</version>
 		</dependency>
 
+		<!-- WebSocket API -->
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
