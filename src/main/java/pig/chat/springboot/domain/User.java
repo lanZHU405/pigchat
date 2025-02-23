@@ -34,4 +34,6 @@ public class User {
     private String phoneNumber;
 
     private String nickName;
+
+    private String backgroundImg;
 }
