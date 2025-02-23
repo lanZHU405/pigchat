@@ -72,4 +72,9 @@ public class UserController {
     public Result<User> getUserInfo(@PathVariable String id){
         return Result.success(userService.getById(id));
     }
+
+    @PostMapping("/update")
+    public Result<String> updateUser(@RequestBody User user){
+        return Result.success(userService.updateById(user)+"");
+    }
 }
