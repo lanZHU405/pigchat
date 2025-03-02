@@ -1,5 +1,10 @@
 spring:
-  ip: 127.0.0.1
+  profiles:
+    active: prod
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
   rabbitmq:
     host: 113.44.139.100 #主机名
     port: 5672  # 消息发送接收端口
