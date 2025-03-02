@@ -33,6 +33,8 @@ public class User {
 
     private String phoneNumber;
 
+    private String signature;
+
     private String nickName;
 
     private String backgroundImg;
