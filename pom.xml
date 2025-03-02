@@ -8,6 +8,7 @@
 		<version>3.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<packaging>jar</packaging>
 	<groupId>pig.chat</groupId>
 	<artifactId>springboot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -169,14 +170,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>3.1.1</version>
 				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+					<finalName>pigchat</finalName>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

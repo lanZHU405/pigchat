@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pig.chat.springboot.common.Result;
+import pig.chat.springboot.exception.ServiceException;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,10 +53,23 @@ public class FileController {
 
     @GetMapping("download/{fileName}")
     public void download(@PathVariable String fileName, HttpServletResponse response) throws IOException {
-        String filePath = ROOT_PATH+File.separator+fileName;
-        if(!FileUtil.exist(filePath)){
-            return ;
+        String filePath = ROOT_PATH + File.separator + fileName;
+
+        if (!FileUtil.exist(filePath)) {
+            throw new ServiceException("没有该路径：" + filePath);
         }
+
+        // 设置响应头的 Content-Type
+        response.setContentType("application/octet-stream"); // 或根据图片格式设置具体的 MIME 类型
+
+        // 设置响应头的 Content-Disposition
+        String encodedFileName = URLEncoder.encode(fileName, "UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName);
+
+        // 设置响应的字符编码
+        response.setCharacterEncoding("UTF-8");
+
+        // 读取文件并写入响应流
         byte[] bytes = FileUtil.readBytes(filePath);
         ServletOutputStream outputStream = response.getOutputStream();
         outputStream.write(bytes);
