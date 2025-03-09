@@ -3,11 +3,12 @@ package pig.chat.springboot.domain;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @TableName("users")
-public class User {
+public class User implements Serializable {
 
     private String id;
 

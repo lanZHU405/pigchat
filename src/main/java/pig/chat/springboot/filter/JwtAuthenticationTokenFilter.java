@@ -19,6 +19,7 @@ import pig.chat.springboot.mapper.MenuMapper;
 import pig.chat.springboot.mapper.UserMapper;
 import pig.chat.springboot.service.UserService;
 import pig.chat.springboot.utils.JwtUtil;
+import pig.chat.springboot.utils.RedisUtil;
 
 import java.io.IOException;
 
@@ -30,6 +31,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private UserMapper userMapper;
     @Resource
     private JwtUtil jwtUtil;
+
+    @Resource
+    private RedisUtil redisUtil;
 
     @Resource
     private MenuMapper menuMapper;
@@ -54,16 +58,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        User user = userMapper.getById(id);
+        User user = (User)redisUtil.get("user:online" + id);
 
-        if (user == null) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not found");
+        if (user == null){
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not login or no exists");
             return;
         }
-
-        if (user.getStatus()==0){
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not Login");
-        }
+        redisUtil.set("user:online"+id,user,8*60*60);
 
         LoginUser loginUser = new LoginUser(user,menuMapper.getPermission(user));
 

@@ -16,8 +16,8 @@ public class JwtUtil {
                 .setId(id) // 设置JWT的ID
                 .setSubject(id) // 设置主题，可以是用户的角色、类型等
                 .setIssuedAt(new Date()) // 设置签发时间
-                .signWith(SignatureAlgorithm.HS256, "secret") // 使用HS256算法和密钥secret进行签名
-                .setExpiration(new Date(System.currentTimeMillis() + 7200000));  // 设置过期时间两小时
+                .signWith(SignatureAlgorithm.HS256, "secret"); // 使用HS256算法和密钥secret进行签名
+//                .setExpiration(new Date(System.currentTimeMillis() + 7200000));  // 设置过期时间两小时
         // 构建并返回JWT
         return builder.compact();
     }

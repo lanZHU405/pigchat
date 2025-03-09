@@ -20,6 +20,7 @@ import pig.chat.springboot.exception.ServiceException;
 import pig.chat.springboot.mapper.UserMapper;
 import pig.chat.springboot.service.UserService;
 import pig.chat.springboot.utils.JwtUtil;
+import pig.chat.springboot.utils.RedisUtil;
 
 import java.net.HttpCookie;
 import java.util.List;
@@ -30,6 +31,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private RedisUtil redisUtil;
 
     @Resource
     private AuthenticationManager authenticationManager;
@@ -54,6 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         userMapper.update(new LambdaUpdateWrapper<User>()
                 .set(User::getStatus,1)
                 .eq(User::getId,id));
+        redisUtil.set("user:online"+id,user,8*60*60);
 
 
         return Result.success(token, Codes.LOGIN_YES);
@@ -73,6 +78,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
                 .eq(User::getId,"1" ));
 
         SecurityContextHolder.clearContext(); // 清除安全上下文
+        redisUtil.set("user:online"+user.getId(),null);
 
         return Result.success(Codes.LOGOUT_YES);
     }

@@ -18,6 +18,9 @@ spring:
     resources:
       static-locations: classpath:/public/,classpath:/static/
   data:
+    redis: # redis配置
+      host: 113.44.139.100
+      port: 6379
     mongodb:
       # 主机地址
       host: 113.44.139.100
