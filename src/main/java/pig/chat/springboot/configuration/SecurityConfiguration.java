@@ -66,6 +66,7 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/file/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/druid/js/**","/druid/css/**").permitAll()
                         .requestMatchers("/user/login").anonymous()
                         .anyRequest().authenticated())
