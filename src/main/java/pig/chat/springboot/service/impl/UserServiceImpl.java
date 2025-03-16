@@ -58,6 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         userMapper.update(new LambdaUpdateWrapper<User>()
                 .set(User::getStatus,1)
                 .eq(User::getId,id));
+        user = userMapper.getById(id);
         redisUtil.set("user:online"+id,user,8*60*60);
 
 
