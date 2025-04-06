@@ -26,9 +26,7 @@ public class ChatServer {
      */
     @OnOpen
     public void onOpen(Session session) throws IOException {
-        System.out.println("New connection opened: " + session.getId());
-        String jsonResponse = "{\"message\": \"Connection established with ID: " + session.getId() + "\"}";
-        session.getBasicRemote().sendText(jsonResponse);
+
     }
 
     /**
@@ -46,14 +44,13 @@ public class ChatServer {
             Map<String, String> parsedMessage = parseMessage(message);
             String senderId = parsedMessage.get("senderId");
             String receiverId = parsedMessage.get("receiverId");
-            String content = parsedMessage.get("message");
 
             // 创建或加入频道
             String channelId = createChannelId(senderId, receiverId);
             joinChannel(channelId, session);
 
             // 发布消息到频道
-            publishMessage(channelId, content, session);
+            publishMessage(channelId,message,session);
         } catch (Exception e) {
             e.printStackTrace();
             try {

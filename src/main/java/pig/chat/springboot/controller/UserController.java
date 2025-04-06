@@ -5,6 +5,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pig.chat.springboot.common.Codes;
 import pig.chat.springboot.common.Result;
@@ -12,6 +13,7 @@ import pig.chat.springboot.domain.User;
 import pig.chat.springboot.exception.ServiceException;
 import pig.chat.springboot.service.UserService;
 import pig.chat.springboot.utils.JwtUtil;
+import pig.chat.springboot.utils.SecurityUtil;
 
 import java.util.List;
 
@@ -65,6 +67,12 @@ public class UserController {
     @ResponseBody
     public Result<List<User>> getFriend(@PathVariable String id){
         return userService.getFriendById(id);
+    }
+
+    @GetMapping("/getCurrentUser")
+    @ResponseBody
+    public Result<User> getCurrentUser(){
+        return Result.success(SecurityUtil.getUser());
     }
 
     @GetMapping("/getUserInfo/{id}")

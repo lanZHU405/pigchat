@@ -6,5 +6,7 @@ import pig.chat.springboot.domain.User;
 
 public class SecurityUtil {
 
-    public static User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public static User getUser(){
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 }
